@@ -5,6 +5,7 @@ include("shared.lua")
 function ENT:Initialize()
     -- Setting the model
     self:SetModel("models/props_junk/sawblade001a.mdl")
+    self:DrawShadow(false)
 
     -- Defining physics
     self:SetMoveType(MOVETYPE_VPHYSICS)
@@ -23,7 +24,7 @@ end
 -- Sets collision behaviour to stick to surfaces, kind of like when you shoot a saw blade using the gravity gun
 function ENT:PhysicsCollide(col_data, phys)
     if (col_data.HitEntity:IsWorld() or col_data.HitEntity:GetClass() == "prop_physics") and not col_data.HitEntity:IsPlayer() then
-        if col_data.Speed > 500 then self:EmitSound(Sound("Metal.SawBladeStick")) phys:EnableMotion(false) end
+        if col_data.Speed > 500 then self:EmitSound(Sound("Metal.SawBladeStick")) phys:EnableMotion(false) phys:Sleep() phys:EnableMotion(true) end
     end
 end
 
