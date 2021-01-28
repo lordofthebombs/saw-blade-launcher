@@ -21,6 +21,10 @@ SWEP.DrawAmmo = false
 SWEP.DrawCrosshair = true
 
 
+-- Setting secondary fire to do absolutely nothing
+SWEP.Secondary.ClipSize = 0
+SWEP.Secondary.DefaultClip = 0
+
 -- Weapon Switching info
 SWEP.Weight = 5
 SWEP.AutoSwitchTo = false
@@ -34,3 +38,8 @@ SWEP.ViewModelFOV = 70
 SWEP.ViewModel = "models/weapons/c_crossbow.mdl"
 SWEP.WorldModel = "models/weapons/w_crossbow.mdl"
 SWEP.UseHands = true
+
+-- This will activate and deactivate the scope
+function SWEP:SecondaryAttack()
+
+end
