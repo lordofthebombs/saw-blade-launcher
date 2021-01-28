@@ -47,15 +47,35 @@ SWEP.ZoomTransition = 0.15
 
 -- This will activate and deactivate the scope
 function SWEP:SecondaryAttack()
-
     local owner = self:GetOwner()
-    print(owner)
-
-    if not scope_zoom then
+    print("Zoom status", self.Scoped)
+    if not self.Scoped then
         owner:SetFOV(self.ZoomFOV, self.ZoomTransition)
-        scope_zoom = true
+        -- self.Scoped = true
     else
         owner:SetFOV(0, self.ZoomTransition)
-        scope_zoom = false
+        -- self.Scoped = false
     end
 end
+
+
+-- Draws scope on HUD when zoomed in (currently doesn't work)
+-- function SWEP:DrawHUD()
+
+--     if not CLIENT then return end
+    
+--     if not self.Scoped then return end
+
+--     local width, height = 687, 687
+
+--     fsin = math.sin(CurTime() * 10) * 5
+
+--     local x, y = (ScrW() / 2) - (width / 2) , (ScrH() / 2) - (height / 2)      -- Center of the screen
+    
+--     surface.SetMaterial(Material("materials/weapons/scope.png"))
+--     surface.SetDrawColor(255, 255, 255, 255)
+--     surface.DrawTexturedRect(x, y, width - fsin, height - fsin)
+
+
+
+-- end
