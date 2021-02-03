@@ -43,10 +43,12 @@ SWEP.UseHands = true
 -- scope variables
 SWEP.ZoomFOV = 15
 SWEP.ZoomTransition = 0.15
+SWEP.ScopeSound = Sound("zoom.wav")
 
 
 -- This will activate and deactivate the scope zoom
 function SWEP:SecondaryAttack()
+    self:EmitSound(self.ScopeSound)
     local owner = self:GetOwner()
     if not self:GetNWBool("Scoped") then
         owner:SetFOV(self.ZoomFOV, self.ZoomTransition)
@@ -75,7 +77,24 @@ if CLIENT then
         end
     end
 
+    -- Reduces sensitivity when zoomed in
     function SWEP:AdjustMouseSensitivity()
         if self:GetNWBool("Scoped") then return 0.2 end
+    end
+
+    -- Draws a custom crosshair
+    function SWEP:DoDrawCrosshair(x, y)
+        local length = 26
+        local gap = 12
+        offset = 1      -- offset used to deal with how pixels are really centered
+        surface.SetDrawColor(255, 255, 255)
+
+        surface.DrawRect(x - offset ,y , 1, 1)                              -- center dot
+        surface.DrawLine(x - length, y, x - gap, y)                         -- left line
+        surface.DrawLine(x + length - 2, y, x + gap - 2, y)                 -- right line       The -2 is there in an attempt to center it perfectly to the screen
+        surface.DrawLine(x - offset, y - length, x - offset, y - gap)       -- top line
+        surface.DrawLine(x - offset, y + length, x - offset, y + gap)       -- bottom line
+
+        return true
     end
 end
