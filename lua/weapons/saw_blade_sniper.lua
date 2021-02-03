@@ -69,13 +69,13 @@ if CLIENT then
 
             local x, y = (ScrW() / 2) - (width / 2) , (ScrH() / 2) - (height / 2)      -- Center of the screen, while also centering image on the screen
             
-            surface.SetMaterial(Material("materials/weapons/scope.png"))
+            surface.SetMaterial(Material("materials/weapons/scope.png", "smooth"))
             surface.SetDrawColor(255, 255, 255, 255)
             surface.DrawTexturedRect(x, y, width, height)
         end
     end
 
     function SWEP:AdjustMouseSensitivity()
-        if self:GetNWBool("Scoped") then return 0.25 end
+        if self:GetNWBool("Scoped") then return 0.2 end
     end
 end
