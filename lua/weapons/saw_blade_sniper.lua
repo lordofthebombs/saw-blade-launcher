@@ -41,41 +41,41 @@ SWEP.WorldModel = "models/weapons/w_crossbow.mdl"
 SWEP.UseHands = true
 
 -- scope variables
-SWEP.ZoomFOV = 20
-SWEP.Scoped = false
+SWEP.ZoomFOV = 15
 SWEP.ZoomTransition = 0.15
 
--- This will activate and deactivate the scope
+
+-- This will activate and deactivate the scope zoom
 function SWEP:SecondaryAttack()
     local owner = self:GetOwner()
-    print("Zoom status", self.Scoped)
-    if not self.Scoped then
+    if not self:GetNWBool("Scoped") then
         owner:SetFOV(self.ZoomFOV, self.ZoomTransition)
-        -- self.Scoped = true
+        owner:CrosshairDisable()
+        self:SetNWBool("Scoped", true)
     else
         owner:SetFOV(0, self.ZoomTransition)
-        -- self.Scoped = false
+        owner:CrosshairEnable()
+        self:SetNWBool("Scoped", false)
     end
 end
 
 
+if CLIENT then
 -- Draws scope on HUD when zoomed in (currently doesn't work)
--- function SWEP:DrawHUD()
+    function SWEP:DrawHUD()
+        if self:GetNWBool("Scoped") then
 
---     if not CLIENT then return end
-    
---     if not self.Scoped then return end
+            local width, height = ScrW(), ScrH()
 
---     local width, height = 687, 687
+            local x, y = (ScrW() / 2) - (width / 2) , (ScrH() / 2) - (height / 2)      -- Center of the screen, while also centering image on the screen
+            
+            surface.SetMaterial(Material("materials/weapons/scope.png"))
+            surface.SetDrawColor(255, 255, 255, 255)
+            surface.DrawTexturedRect(x, y, width, height)
+        end
+    end
 
---     fsin = math.sin(CurTime() * 10) * 5
-
---     local x, y = (ScrW() / 2) - (width / 2) , (ScrH() / 2) - (height / 2)      -- Center of the screen
-    
---     surface.SetMaterial(Material("materials/weapons/scope.png"))
---     surface.SetDrawColor(255, 255, 255, 255)
---     surface.DrawTexturedRect(x, y, width - fsin, height - fsin)
-
-
-
--- end
+    function SWEP:AdjustMouseSensitivity()
+        if self:GetNWBool("Scoped") then return 0.25 end
+    end
+end
