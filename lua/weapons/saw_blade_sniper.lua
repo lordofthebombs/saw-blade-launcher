@@ -46,10 +46,21 @@ SWEP.ZoomTransition = 0.15
 SWEP.ScopeSound = Sound("zoom.wav")
 
 
+-- Charged shot fires here
+function SWEP:PrimaryAttack()
+    local owner = self:GetOwner()
+
+    if not owner:IsValid() then return end          -- Checks if owner is valid
+end
+
+
 -- This will activate and deactivate the scope zoom
 function SWEP:SecondaryAttack()
     self:EmitSound(self.ScopeSound)
     local owner = self:GetOwner()
+
+    if not owner:IsValid() then return end          -- Checks if owner is valid
+
     if not self:GetNWBool("Scoped") then
         owner:SetFOV(self.ZoomFOV, self.ZoomTransition)
         owner:CrosshairDisable()
