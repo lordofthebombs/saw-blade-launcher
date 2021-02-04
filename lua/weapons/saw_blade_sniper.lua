@@ -12,12 +12,12 @@ SWEP.BounceWeaponIcon = false
 
 
 -- Ammo info
-SWEP.Primary.ClipSize = -1
-SWEP.Primary.DefaultClip = -1
+SWEP.Primary.ClipSize = 1
+SWEP.Primary.DefaultClip = 100
 SWEP.Primary.Automatic = false
 SWEP.Primary.Ammo = "XBowBolt"
 SWEP.Primary.Firerate = 1.0
-SWEP.DrawAmmo = false
+SWEP.DrawAmmo = true
 SWEP.DrawCrosshair = true
 
 
@@ -33,6 +33,8 @@ SWEP.AutoSwitchFrom = false
 SWEP.Slot = 2
 SWEP.SlotPos = 1
 
+SWEP.ReloadingTime = 1
+SWEP.EmptySound = Sound("weapons/ar2/ar2_empty.wav")
 
 -- Weapon viewmodel settings
 SWEP.ViewModelFOV = 70
@@ -46,11 +48,34 @@ SWEP.ZoomTransition = 0.15
 SWEP.ScopeSound = Sound("zoom.wav")
 
 
--- Charged shot fires here
+-- Shots are fired here
 function SWEP:PrimaryAttack()
     local owner = self:GetOwner()
 
-    if not owner:IsValid() then return end          -- Checks if owner is valid
+    if self:Clip1() > 0 then
+        self:ShootEffects(ACT_VM_PRIMARYATTACK)
+        self:TakePrimaryAmmo(1)
+        owner:SetAnimation( PLAYER_ATTACK1 ) -- 3rd Person Animation
+    else
+        self:EmitSound(self.EmptySound)
+    end
+
+end
+
+
+-- Reload function
+function SWEP:Reload()
+    local owner = self:GetOwner()
+    if self.ReloadingTime and CurTime() <= self.ReloadingTime then return end
+ 
+    if ( self:Clip1() < self.Primary.ClipSize and self.Owner:GetAmmoCount( self.Primary.Ammo ) > 0 ) then
+        --self:EmitSound(self.ReloadSound)
+        self:DefaultReload(ACT_VM_RELOAD)
+        local AnimationTime = owner:GetViewModel():SequenceDuration()
+        self.ReloadingTime = CurTime() + AnimationTime
+        self:SetNextPrimaryFire(CurTime() + AnimationTime)
+        self:SetNextSecondaryFire(CurTime() + AnimationTime)
+    end
 end
 
 
