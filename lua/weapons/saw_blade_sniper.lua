@@ -98,6 +98,11 @@ function SWEP:SecondaryAttack()
 end
 
 
+function SWEP:fire_saw()
+    
+end
+
+
 if CLIENT then
 -- Draws scope on HUD when zoomed in (currently doesn't work)
     function SWEP:DrawHUD()
